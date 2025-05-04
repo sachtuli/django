@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
@@ -16,6 +17,8 @@ class WatchList(models.Model):
     description = models.TextField(max_length=200)
     active = models.BooleanField(default=True)
     platform = models.ForeignKey(StreamingPlatform, on_delete=models.CASCADE, related_name="watchlist")
+    avg_rating = models.FloatField(default=0)
+    number_rating = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -23,6 +26,7 @@ class WatchList(models.Model):
 
 
 class Review(models.Model):
+    review_user = models.ForeignKey(User, on_delete=models.CASCADE)
     review = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     description = models.TextField(max_length=200, null=True)
     active = models.BooleanField(default=True)
